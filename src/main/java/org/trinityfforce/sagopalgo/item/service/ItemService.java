@@ -1,6 +1,5 @@
 package org.trinityfforce.sagopalgo.item.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +8,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.trinityfforce.sagopalgo.bid.repository.BidRepository;
 import org.trinityfforce.sagopalgo.category.entity.Category;
 import org.trinityfforce.sagopalgo.category.repository.CategoryRepository;
 import org.trinityfforce.sagopalgo.item.dto.request.ItemRequest;
+import org.trinityfforce.sagopalgo.item.dto.request.SearchRequest;
 import org.trinityfforce.sagopalgo.item.dto.response.ItemResponse;
 import org.trinityfforce.sagopalgo.item.dto.response.ResultResponse;
 import org.trinityfforce.sagopalgo.item.entity.Item;
@@ -42,43 +41,19 @@ public class ItemService {
     @Cacheable(value = "item", key = "#root.methodName", cacheManager = "cacheManager", unless = "#result == null")
     public List<ItemResponse> getItem() {
         List<Item> itemList = itemRepository.findAll();
-        List<ItemResponse> itemResponseList = new ArrayList<>();
-        for (Item item : itemList)
-                itemResponseList.add(new ItemResponse(item));
 
-
-        return itemResponseList;
-//        return itemList.stream().map(item -> new ItemResponse(item)).collect(Collectors.toList());
+        return itemList.stream().map(item -> new ItemResponse(item)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<ItemResponse> searchItem(String itemName) {
-        List<Item> itemList = itemRepository.findAll();
-        List<ItemResponse> itemResponseList = new ArrayList<>();
-
-        for (Item item : itemList) {
-            if (item.getName().contains(itemName)) {
-                itemResponseList.add(new ItemResponse(item));
-            }
-        }
-
-        return itemResponseList;
+    @Cacheable(value = "item", key = "#searchRequest", cacheManager = "cacheManager", unless = "#result == null")
+    public List<ItemResponse> searchItem(SearchRequest searchRequest) {
+        List<Item> itemList = itemRepository.searchItem(searchRequest);
+        return itemList.stream().map(item -> new ItemResponse(item)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<ItemResponse> getCategoryItem(String categoryName) {
-        Category category = getCategory(categoryName);
-        List<Item> itemList = itemRepository.findAllByCategory(category);
-        List<ItemResponse> itemResponseList = new ArrayList<>();
-
-        for (Item item : itemList) {
-            itemResponseList.add(new ItemResponse(item));
-        }
-
-        return itemResponseList;
-    }
-
-    @Transactional(readOnly = true)
+    @Cacheable(value = "item", key = "#itemId", cacheManager = "cacheManager", unless = "#result == null")
     public ItemResponse getItemById(Long itemId) throws BadRequestException {
         Item item = getItem(itemId);
 
@@ -141,7 +116,7 @@ public class ItemService {
     }
 
     private void isBidding(Item item) throws BadRequestException {
-        if (item.getBidCount()>0) {
+        if (item.getBidCount() > 0) {
             throw new BadRequestException("해당 상품에 입찰자가 존재합니다.");
         }
     }
