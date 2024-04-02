@@ -1,11 +1,13 @@
 package org.trinityfforce.sagopalgo.item.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trinityfforce.sagopalgo.category.entity.Category;
@@ -26,6 +28,8 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+
+    private final RedisTemplate<String, HashMap<String, Object>> hashMapRedisTemplate;
 
     @Transactional
     @CacheEvict(value = "item", allEntries = true)
@@ -53,10 +57,9 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "item", key = "#itemId", cacheManager = "cacheManager", unless = "#result == null")
     public ItemResponse getItemById(Long itemId) throws BadRequestException {
         Item item = getItem(itemId);
-
+        cacheCheck(item);
         return new ItemResponse(item);
     }
 
@@ -118,6 +121,15 @@ public class ItemService {
     private void isBidding(Item item) throws BadRequestException {
         if (item.getBidCount() > 0) {
             throw new BadRequestException("해당 상품에 입찰자가 존재합니다.");
+        }
+    }
+
+    private void cacheCheck(Item item) {
+        String itemKey = "Item:" + item.getId();
+        HashMap<String, Object> bidInfo = hashMapRedisTemplate.opsForValue().get(itemKey);
+        if (bidInfo != null) {
+            Integer currentPrice = (Integer) bidInfo.get("price");
+            item.updateBidItem(currentPrice);
         }
     }
 }
