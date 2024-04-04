@@ -55,7 +55,7 @@ public class BidService {
     }
 
     @Transactional
-    @WithDistributedLock(lockName = "#itemId")
+//    @WithDistributedLock(lockName = "#itemId")
     @CacheEvict(value = "item", allEntries = true)
     public void placeBid(Long itemId, User user, BidRequestDto requestDto) {
         Item item = itemRepository.findById(itemId).orElseThrow(
