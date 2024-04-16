@@ -9,17 +9,16 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trinityfforce.sagopalgo.category.entity.Category;
 import org.trinityfforce.sagopalgo.category.repository.CategoryRepository;
 import org.trinityfforce.sagopalgo.item.dto.request.ItemRequest;
-import org.trinityfforce.sagopalgo.item.dto.request.OptionRequest;
 import org.trinityfforce.sagopalgo.item.dto.request.RelistRequest;
 import org.trinityfforce.sagopalgo.item.dto.request.SearchRequest;
+import org.trinityfforce.sagopalgo.item.dto.response.ItemInfoResponse;
 import org.trinityfforce.sagopalgo.item.dto.response.ItemResponse;
 import org.trinityfforce.sagopalgo.item.dto.response.ResultResponse;
 import org.trinityfforce.sagopalgo.item.entity.Item;
@@ -62,21 +61,17 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ItemResponse> pageItem(SearchRequest searchRequest, OptionRequest optionRequest) {
-        String option = optionRequest.getOption();
-        Sort.Direction direction = optionRequest.isASC() ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, option);
-        PageRequest pageable = PageRequest.of(optionRequest.getPage(), optionRequest.getSize(),
-            sort);
+    @Cacheable(value = "item", cacheManager = "cacheManager", unless = "#result == null")
+    public Page<ItemResponse> pageItem(SearchRequest searchRequest, Pageable pageable) {
         return itemRepository.pageItem(searchRequest, pageable);
     }
 
     @Transactional
     @CacheEvict(value = "item", allEntries = true)
-    public ItemResponse getItemById(Long itemId) throws BadRequestException {
+    public ItemInfoResponse getItemById(Long itemId) throws BadRequestException {
         Item item = getItem(itemId);
         item.addViewCount();
-        return new ItemResponse(item);
+        return new ItemInfoResponse(item);
     }
 
     @Transactional
