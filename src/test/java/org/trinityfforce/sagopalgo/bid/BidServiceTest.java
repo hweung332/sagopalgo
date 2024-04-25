@@ -120,7 +120,7 @@ public class BidServiceTest {
         @DisplayName("1-3. 입찰 실패 테스트 (금액)")
         void placeBidFailure_price() {
             //given
-            BidRequestDto bidRequestDto = new BidRequestDto(TEST_ITEMPRICE1);
+            BidRequestDto bidRequestDto = new BidRequestDto(TEST_ITEMPRICE1-TEST_BIDUNIT1);
             given(itemRepository.findById(TEST_ITEM_ID1)).willReturn(
                 Optional.ofNullable(testItem2));
 
@@ -130,7 +130,7 @@ public class BidServiceTest {
             });
 
             //then
-            assertEquals("입찰가는 " + (TEST_ITEMPRICE1 + TEST_BIDUNIT1) + "원 이상이어야 합니다.",
+            assertEquals("입찰가는 " + TEST_ITEMPRICE1 + "원 이상이어야 합니다.",
                 exception.getMessage());
         }
     }
