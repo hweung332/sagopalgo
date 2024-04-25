@@ -165,11 +165,11 @@ public class ItemService {
     private String getCondition() {
         LocalDateTime time = LocalDateTime.now();
         if (time.getHour() < 9) {
-            return "before";
-        } else if (time.getHour() < 18) {
             return "progress";
-        } else {
+        } else if (time.getHour() < 15) {
             return "after";
+        } else {
+            return "before";
         }
     }
 

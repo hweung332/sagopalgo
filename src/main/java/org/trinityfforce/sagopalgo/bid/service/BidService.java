@@ -79,7 +79,7 @@ public class BidService {
                 throw new BadRequestException("경매중인 상품만 입찰이 가능합니다.");
             }
             bidUnit = item.getBidUnit();
-            minimum = item.getHighestPrice() + bidUnit;
+            minimum = item.getHighestPrice();
         }
         if (minimum > price) {
             throw new BadRequestException("입찰가는 " + minimum + "원 이상이어야 합니다.");
