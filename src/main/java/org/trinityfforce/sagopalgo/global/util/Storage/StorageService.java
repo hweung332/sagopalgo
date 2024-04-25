@@ -28,6 +28,6 @@ public class StorageService {
         metadata.setContentType(file.getContentType());
 
         s3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-        return s3Client.getUrl(bucket, fileName).toString();
+        return fileName;
     }
 }
