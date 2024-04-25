@@ -67,6 +67,7 @@ public class BidService {
         throws BadRequestException {
         HashMap<String, Object> oldBidInfo = hashMapRedisTemplate.opsForValue().get(itemKey);
         int minimum;
+        int max = 2100000000;
         Integer bidUnit;
         if (oldBidInfo != null) {
             bidUnit = (Integer) oldBidInfo.get("bidUnit");
@@ -83,6 +84,9 @@ public class BidService {
         }
         if (minimum > price) {
             throw new BadRequestException("입찰가는 " + minimum + "원 이상이어야 합니다.");
+        }
+        if (max < price){
+            throw new BadRequestException("입찰가는 " + max + "원 이하이어야 합니다.");
         }
         return bidUnit;
     }
