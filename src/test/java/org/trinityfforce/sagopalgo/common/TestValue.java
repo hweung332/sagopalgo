@@ -78,6 +78,7 @@ public class TestValue {
         TEST_URL1,
         TEST_ITEMPRICE1,
         TEST_VIEWCOUNT,
+        TEST_USERNAME1,
         TEST_CATEGORY1,
         TEST_USER1,
         TEST_ITEMSTATUS_PENDING
@@ -99,6 +100,7 @@ public class TestValue {
         TEST_URL1,
         TEST_ITEMPRICE1,
         TEST_VIEWCOUNT,
+        TEST_USERNAME1,
         TEST_CATEGORY1,
         TEST_USER1,
         TEST_ITEMSTATUS_INPROGRESS
@@ -114,6 +116,7 @@ public class TestValue {
         TEST_URL1,
         TEST_ITEMPRICE1,
         TEST_VIEWCOUNT,
+        TEST_USERNAME1,
         TEST_CATEGORY1,
         TEST_USER1,
         TEST_ITEMSTATUS_COMPLETED
@@ -130,6 +133,7 @@ public class TestValue {
         TEST_URL1,
         TEST_ITEMPRICE1,
         TEST_VIEWCOUNT,
+        TEST_USERNAME1,
         TEST_CATEGORY1,
         TEST_USER1,
         TEST_ITEMSTATUS_COMPLETED
