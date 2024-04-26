@@ -59,6 +59,9 @@ public class Item extends Timestamped {
     @Column
     private Integer viewCount;
 
+    @Column
+    private String username;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -83,6 +86,7 @@ public class Item extends Timestamped {
         this.user = user;
         this.status = ItemStatusEnum.PENDING;
         this.url = itemRequest.getUrl();
+        this.username = user.getUsername();
     }
 
     public void update(ItemRequest itemRequest, Category category) {
