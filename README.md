@@ -9,22 +9,6 @@
 *********************
 ![image](https://github.com/TrinityFForce/4Go8Go/assets/54929479/f0d9cb31-411b-418c-be25-c78d215d7cd7)
 
-### 👩🏼‍🤝‍👩🏼멤버 구성
-**************
-<table>
-<tbody>
-<tr>
-<td align="center"><a href="https://github.com/KIM-TABLE-NEXT"><img src="https://avatars.githubusercontent.com/u/54929479?v=4" width="100px;" alt="김상엽"/><br /><sub><b> 김상엽 </b></sub></a><br /></td>
-<td align="center"><a href="https://github.com/DragonSky2357"><img src="https://avatars.githubusercontent.com/u/38320524?v=4" width="100px;" alt="박용민"/><br /><sub><b> 박용민 </b></sub></a><br /></td>
-<td align="center"><a href="https://github.com/zapzookj"><img src="https://avatars.githubusercontent.com/u/154570825?v=4" width="100px;" alt="이종원"/><br /><sub><b> 이종원 </b></sub></a><br /></td>
-    </tr>
-  </tbody>
-</table>
-
-* 김상엽 - 상품, 결제, CI
-* 박용민 - 유저, 카테고리, FE
-* 이종원 - 입찰 도메인, CD
-
 ## 🛠️ 사용 기술
 **************
 ## **Back-end**
